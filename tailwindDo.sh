@@ -1,9 +1,48 @@
 #!/bin/bash
 
+
+addPlugin() {
+  # Check if project name is provided
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    printf "Please provide a project name and a plugin name.\n"
+    exit 1
+  fi
+  local project_name=$1
+  local plugin_name=$2
+  config_file="./$project_name/tailwind.config.js"
+  
+
+  if [ -f "$config_file" ]; then
+    # Check if plugin already exists in config
+    if grep -q "$plugin_name" "$config_file"; then
+      echo "Plugin $plugin_name already exists in $config_file."
+    else
+      printf "installing plugin..\n"
+      npm install $plugin_name
+      exit_code=$?
+      # Check if there was an error
+      if [ $exit_code -ne 0 ]; then
+        echo "npm install command failed with error code $exit_code"
+        # Add urther error handling logic here if needed
+      else
+        echo "npm install command executed successfully"
+      # Add plugin to the end of the plugins array
+      printf $plugin_name.'\n'
+      printf $config_file.'\n'
+      sed -i -e "s|\(plugins: \[\)|\1\n    require('$plugin_name'),|" "$config_file"
+      echo "Plugin $plugin_name added to $config_file."
+      fi
+    fi
+  else
+    echo "tailwind.config.js not found."
+  fi
+}
+
+
 showRunInstructions(){
     local filename=$1
     # Show command required to run tailwind in watch mode
-    printf "Run tailwind using 'cd $project_name && npx tailwindcss -i ./src/css/input.css -o ./src/css/output.css --watch'\n"
+    printf "Run tailwind using 'cd $project_name && npx tailwindcss -i ./src/css/input.css -o ./src/css/output.css --minify --watch'\n"
     # Show URL to access the HTML file
     # # Get the absolute path of the current directory
     current_dir=$(pwd)
@@ -152,10 +191,13 @@ EOF
 
 # Main script logic
 case "$1" in 
-    createProject|p|project)
+    pl|plugin)
+        addPlugin "$2" "$3"
+        ;;
+    pr|project)
         createProject "$2"
         ;;
-    createHtml|html|h)
+    h|html)
         if [ -z "$3" ]; then
             createHtml "$2"
         else
@@ -163,7 +205,10 @@ case "$1" in
         fi
         ;;
     *)
-        printf "\nUsage:\n $0 {createProject|project|p <Projectname> :This creates a new folder with basic tailwind structure\n $0 createHtml|html|h <Projectname>}: This creates a new html file in the project folder\n"
+        printf "\nUsage:\n 
+        $0 project|pr <Projectname>               : Create a new folder with basic tailwind structure 
+        $0 html|h     <Projectname> <filename?>   : Create a new html file in src/htmlssrc/htmls. Filename is optional
+        $0 plugin|pl  <Projectname> <plugin_name> : Adds a new plugin"
         exit 1
         ;;
 esac
