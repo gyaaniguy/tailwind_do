@@ -91,6 +91,7 @@ EOF
 }
 
 createHtml() {
+    local filename=$2
     # Check if project name is provided
     if [ -z "$1" ]; then
         printf "Please provide a project name.\n"
@@ -99,10 +100,19 @@ createHtml() {
 
     project_name="$1"
 
-    # Find the next available HTML filename
-    next_file=$(find "$project_name/src/htmls" -type f -name '*.html' | sort -V | tail -n 1 | awk -F/ '{print $NF}' | sed 's/.html//')
-    next_file=$((next_file + 1))
-    filename="$project_name/src/htmls/$next_file.html"
+
+    if [  "$2" ]; then
+        filename="$project_name/src/htmls/$2.html"
+    else
+        echo 'creating new number file'
+        # Find the next available HTML filename
+        next_file=$(find "$project_name/src/htmls" -type f -regex '.*/[0-9]+.html' | sort  -n | tail -n 1 | awk -F/ '{print $NF}' | sed 's/.html//')
+        echo $next_file
+        next_file=$((next_file + 1))
+        echo $next_file
+        filename="$project_name/src/htmls/$next_file.html"
+    fi
+
 
     # Create file with specified content
     cat << EOF > "$filename"
@@ -135,7 +145,11 @@ case "$1" in
         createProject "$2"
         ;;
     createHtml|html|h)
-        createHtml "$2"
+        if [ -z "$3" ]; then
+            createHtml "$2"
+        else
+            createHtml "$2" "$3"
+        fi
         ;;
     *)
         printf "\nUsage:\n $0 {createProject|project|p <Projectname> :This creates a new folder with basic tailwind structure\n $0 createHtml|html|h <Projectname>}: This creates a new html file in the project folder\n"
