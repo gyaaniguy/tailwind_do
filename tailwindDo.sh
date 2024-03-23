@@ -30,24 +30,25 @@ createProject() {
 
     # Create files with specified content
     cat << EOF > "$project_name/src/css/input.css"
+/* @tailwind import Tailwind CSS utilities, base styles, and components */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+/* @layer organizes styles into logical layers for better control over specificity and order of generated CSS */
+/* @apply allows combining existing tailwind classes into custom classes or tags */
+@layer components {
+    /* Define a new class 'blue-section' */
+    /* .blue-section {
+        @apply container mx-auto flex flex-col justify-center bg-blue-600;
+    }
+    */
+}
+
 @layer base {
   h1 {
-    @apply text-4xl;
-  }
-  h2 {
-    @apply text-3xl;
-  }
-  h3 {
-    @apply text-2xl;
-  }
-}
-@layer components {
-  .content-auto {
-    content-visibility: auto;
+    @apply text-4xl; /* Apply the text-4xl utility to h1 */
   }
 }
 EOF
