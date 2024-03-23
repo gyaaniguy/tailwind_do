@@ -16,8 +16,8 @@ Helper bash script  to make life easy while learning tailwindcss
 ```bash 
 ./tailwindDo.sh {createProject|project|p <Projectname>}
 ```
-This creates a new folder with basic tailwind structure
-Example:
+This creates a new folder with basic tailwind structure  
+**Examples:**:
 ```bash
 ./tailwindDo.sh createProject learntailwind 
 ./tailwindDo.sh p learntailwind2
@@ -26,7 +26,8 @@ Example:
 ```bash 
  ./tailwindDo.sh createHtml|html|h <Projectname>
 ```
-This creates a new html file in the src/htmls folder
+This creates a new html file in the src/htmls folder  
+**Examples:**
 ```bash
 ./tailwindDo.sh createHtml learntailwind
 ./tailwindDo.sh h learntailwind2 
@@ -45,3 +46,11 @@ This creates a new html file in the src/htmls folder
         - input.css
     - tailwind.config.js
 ```
+
+### Problems 
+
+- make sure npx command is running
+- it should create OR update src/css/output.css file
+- Everytime you save, the output.css file should be updated and a message should be  visible in the npx command
+- make sure npx command is being run from the project directory
+- Check the 'content line' in tailwind.config.js
