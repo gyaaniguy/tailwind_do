@@ -12,7 +12,7 @@ showRunInstructions(){
     encoded_file_path=$(printf "%s" "$file_path" | sed 's/ /%20/g')
     printf "If using vscode live server extension: Open URL http://localhost:5500/$filename\n"
     file_url="file://$encoded_file_path"
-    printf "Open URL file : file://$encoded_file_path\n"
+    printf "Open URL file : file://$encoded_file_path\n\n"
     printf "New css rules can be added to src/css/input.css\n" 
 }
 
@@ -24,6 +24,12 @@ createProject() {
     fi
 
     project_name="$1"
+
+    # Check if project directory already exists
+    if [ -d "$project_name" ]; then
+        echo "Project directory already exists."
+        exit 1
+    fi
 
     # Create project directory
     mkdir -p "$project_name/src/htmls" "$project_name/src/img" "$project_name/src/css"
@@ -105,15 +111,19 @@ createHtml() {
     if [  "$2" ]; then
         filename="$project_name/src/htmls/$2.html"
     else
-        echo 'creating new number file'
+        echo 'Creating new number file'
         # Find the next available HTML filename
-        next_file=$(find "$project_name/src/htmls" -type f -regex '.*/[0-9]+.html' | sort  -n | tail -n 1 | awk -F/ '{print $NF}' | sed 's/.html//')
+        next_file=$(find "$project_name/src/htmls" -type f -regex '.*/[0-9]+.html' | sort -V | tail -n 1 | awk -F/ '{print $NF}' | sed 's/.html//')
         echo $next_file
         next_file=$((next_file + 1))
         echo $next_file
         filename="$project_name/src/htmls/$next_file.html"
     fi
-
+    # Check if project directory already exists
+    if [ -f "$filename" ]; then
+        echo "$filename already exists"
+        exit 1
+    fi
 
     # Create file with specified content
     cat << EOF > "$filename"
