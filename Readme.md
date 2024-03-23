@@ -5,6 +5,7 @@ Helper bash script  to make life easy while learning tailwindcss
 
 ### Features 
 - Rapidly creates new html files and tailwindcss projects
+- add plugins from cmd line
 - Can automatically calculate the next html file name
 - Provides help to compile and run the project
 - Commented source code to make learning even easier. 
@@ -33,6 +34,16 @@ If no filename is specified It figures out the next filename - 1.html, 2.html et
 ./tailwindDo.sh createHtml learntailwind # creates src/htmls/2.html
 ./tailwindDo.sh h learntailwind2         # creates src/htmls/3.html
 ./tailwindDo.sh h learntailwind2 afile   # creates src/htmls/afile.html
+```
+#### Add Plugin
+```bash
+./tailwindDo.sh pl|plugin test1 <PluginName>
+```
+Installs a new plugin from npm. Then add the relevant config to tailwind.config.js
+**Examples**
+```bash
+./tailwindDo.sh pl test1 '@tailwindcss/typography'
+./tailwindDo.sh plugin learn1 '@tailwindcss/typography'
 ```
 
 ### Folder and file structure created
