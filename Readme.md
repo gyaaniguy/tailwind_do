@@ -5,7 +5,7 @@ Helper bash script  to make life easy while learning tailwindcss
 
 ### Features 
 - Rapidly creates new html files and tailwindcss projects
-- automatically figures out the html file name
+- Can automatically calculate the next html file name
 - Provides help to compile and run the project
 - Commented source code to make learning even easier. 
 
@@ -24,13 +24,15 @@ This creates a new folder with basic tailwind structure
 ```
 #### Create new html file
 ```bash 
- ./tailwindDo.sh createHtml|html|h <Projectname>
+ ./tailwindDo.sh createHtml|html|h <Projectname> <fileName?>
 ```
-This creates a new html file in the src/htmls folder  
+A new html file is created src/htmls folder.  
+If no filename is specified It figures out the next filename - 1.html, 2.html etc
 **Examples:**
 ```bash
-./tailwindDo.sh createHtml learntailwind
-./tailwindDo.sh h learntailwind2 
+./tailwindDo.sh createHtml learntailwind # creates src/htmls/2.html
+./tailwindDo.sh h learntailwind2         # creates src/htmls/3.html
+./tailwindDo.sh h learntailwind2 afile   # creates src/htmls/afile.html
 ```
 
 ### Folder and file structure created
